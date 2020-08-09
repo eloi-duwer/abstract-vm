@@ -1,0 +1,13 @@
+push int32(2)
+push int32(3)
+push int32(2)
+push int32(3)
+push int32(2)
+push int32(3)
+push int32(2)
+push int32(3)
+push int32(2)
+push int32(3)
+add
+dump
+exit
