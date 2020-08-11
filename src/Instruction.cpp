@@ -32,7 +32,9 @@ Instruction::Instruction( const std::string &line )
 		this->instruction = print;
 	else if (str.rfind("exit", 0) == 0)
 		this->instruction = exit;
-	else {}
+	else {
+		throw UnknownOperationException();
+	}
 }
 
 Instruction::Instruction( const Instruction &inst )
@@ -121,6 +123,9 @@ bool	Instruction::exec(std::vector<const IOperand *> &stack)
 			break;
 		}
 		case pop:
+			if (stack.size() == 0)
+				throw NotEnoughOperandsOnStackException();
+			delete stack.back();
 			stack.pop_back();
 			break;
 		case dump: {
@@ -134,39 +139,49 @@ bool	Instruction::exec(std::vector<const IOperand *> &stack)
 		}
 		case assert:
 			if (*this->op != *stack.back())
-				std::cout << "assertion failed : expected " << *this->op << ", got " << *stack.back() << std::endl;
+				throw AssertionException(this->op->toString(), stack.back()->toString());
 			break;
 		case add: {
 			const IOperand *op = *stack[stack.size() - 2] + *stack.back();
+			delete stack.back();
 			stack.pop_back();
+			delete stack.back();
 			stack.pop_back();
 			stack.push_back(op);
 			break;
 		}
 		case sub: {
 			const IOperand *op = *stack[stack.size() - 2] - *stack.back();
+			delete stack.back();
 			stack.pop_back();
+			delete stack.back();
 			stack.pop_back();
 			stack.push_back(op);
 			break;
 		}
 		case mul: {
 			const IOperand *op = *stack[stack.size() - 2] * *stack.back();
+			delete stack.back();
 			stack.pop_back();
+			delete stack.back();
 			stack.pop_back();
 			stack.push_back(op);
 			break;
 		}
 		case div: {
 			const IOperand *op = *stack[stack.size() - 2] / *stack.back();
+			delete stack.back();
 			stack.pop_back();
+			delete stack.back();
 			stack.pop_back();
 			stack.push_back(op);
 			break;
 		}
 		case mod: {
 			const IOperand *op = *stack[stack.size() - 2] % *stack.back();
+			delete stack.back();
 			stack.pop_back();
+			delete stack.back();
 			stack.pop_back();
 			stack.push_back(op);
 			break;
@@ -180,13 +195,20 @@ bool	Instruction::exec(std::vector<const IOperand *> &stack)
 			}
 			break;
 		case exit:
-			std::cout << "Exit" << std::endl;
 			return (true);
 			break;
 		default:
+			throw UnknownOperationException();
 			break;
 	}
 	return (false);
+}
+
+Instruction::AssertionException::AssertionException(const std::string &expected, const std::string &got) :
+str(std::string("Assertion exception: expected : expected " + expected + ", got " + got)) {}
+
+const char * Instruction::AssertionException::what() const throw() {
+	return this->str.c_str();
 }
 
 OperandParser Instruction::parser = OperandParser();

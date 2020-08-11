@@ -109,7 +109,10 @@ IOperand const *	Operand<T>::operator*( IOperand const &rhs ) const
 template <typename T>
 IOperand const *	Operand<T>::operator/( IOperand const &rhs ) const
 {
-	double	res = (double)this->value / stod(rhs.toString());
+	double val = stod(rhs.toString());
+	if (val == 0.0f)
+		throw DivisionByZeroException();
+	double	res = (double)this->value / val;
 
 	if (this->getPrecision() > rhs.getPrecision())
 		return (Operand::factory.createOperand(this->getType(), std::to_string(res)));
@@ -120,7 +123,10 @@ IOperand const *	Operand<T>::operator/( IOperand const &rhs ) const
 template <typename T>
 IOperand const *	Operand<T>::operator%( IOperand const &rhs ) const
 {
-	double	res = fmod((double)this->value, stod(rhs.toString()));
+	double val = stod(rhs.toString());
+	if (val == 0.0f)
+		throw DivisionByZeroException();
+	double	res = fmod((double)this->value, val);
 
 	if (this->getPrecision() > rhs.getPrecision())
 		return (Operand::factory.createOperand(this->getType(), std::to_string(res)));

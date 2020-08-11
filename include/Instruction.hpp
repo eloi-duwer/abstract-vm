@@ -21,6 +21,29 @@ class Instruction
 		std::string const	toString( void ) const;
 		bool				exec(std::vector<const IOperand *> &stack);
 
+		struct UnknownOperationException : public std::exception {
+			virtual const char *what() const throw() {
+				return ("Operation unknown");
+			}
+		};
+
+		struct NotEnoughOperandsOnStackException : public std::exception {
+			virtual const char *what() const throw() {
+				return ("Not enough operands are available on the stack");
+			}
+		};
+
+		class AssertionException : public std::exception {
+
+			public:
+
+				AssertionException(const std::string &expected, const std::string &got);
+				virtual const char *what() const throw();
+
+			const std::string str;
+
+		};
+
 	private:
 
 		static OperandParser	parser;

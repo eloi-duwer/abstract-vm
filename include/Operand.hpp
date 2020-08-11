@@ -27,6 +27,12 @@ class Operand : public IOperand {
 
 		std::string const & toString( void ) const;
 
+		struct DivisionByZeroException : public std::exception {
+			virtual const char *what() const throw() {
+				return ("Operation would divide / modulo by zero");
+			}
+		};
+
 	private:
 
 		T						value;

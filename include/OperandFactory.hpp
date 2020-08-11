@@ -12,7 +12,7 @@ class OperandFactory {
 		OperandFactory ( void );
 		IOperand const * createOperand( IOperand::eOperandType type, std::string const & value ) const;
 
-		struct Overflow : public std::exception {
+		struct OverflowException : public std::exception {
 			virtual const char *what() const throw() {
 				return ("Creating a new Operand would yield to an overflow");
 			}

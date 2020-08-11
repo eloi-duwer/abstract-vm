@@ -26,10 +26,35 @@ void execInstructions(std::queue<Instruction*> &queue)
 	std::vector<const IOperand *>	stack;
 	while(!queue.empty())
 	{
-		if (queue.front()->exec(stack))
-			break;
+		try {
+			if (queue.front()->exec(stack) == true)
+				break;
+		} catch(const std::exception &e) {
+			std::cout << "Runtime error: " << e.what() << ". Aborting" << std::endl;
+			std::cout << "\tInstruction: \"" << *queue.front() << "\""<< std::endl;
+			std::cout << "\tStack: ";
+			for (std::vector<const IOperand*>::size_type i = 0; i < stack.size(); i++) {
+				std::cout << *stack[i] << " ";
+			}
+			std::cout << std::endl;
+			exit(1);
+		}
 		delete queue.front();
 		queue.pop();
+	}
+	if (queue.size() != 1 || queue.front()->getInstruction() != Instruction::exit)
+	{
+		std::cout << "No exit instruction / exit is not the last instruction, aborting" << std::endl;
+		exit(1);
+	}
+	else
+	{
+		delete queue.front();
+		queue.pop();
+		for (std::vector<const IOperand*>::size_type i = 0; i < stack.size(); i++) {
+			delete stack[i];
+		}
+		stack.clear();
 	}
 }
 
@@ -49,7 +74,7 @@ void	readFile(std::istream& file)
 				queue.push(new Instruction(line));
 			} catch(const std::exception &e) {
 				std::cout << "Parsing error: " << e.what() << std::endl;
-				std::cout << "The above error happened on line " << line_nb << ": \"" << line << "\"" << std::endl;
+				std::cout << "\tLine " << line_nb << ": \"" << line << "\"" << std::endl;
 				had_parsing_errors = true;
 			}
 		}

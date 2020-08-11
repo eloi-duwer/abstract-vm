@@ -1,2 +1,3 @@
 push int8(666)
 push int16(9999999)
+this_is_not_a_valid_operation

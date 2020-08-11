@@ -13,7 +13,7 @@ IOperand const * OperandFactory::createInt8( std::string const & value ) const
 {
 	int val = std::stoi(value);
 	if (val < INT8_MIN || val > INT8_MAX)
-		throw Overflow();
+		throw OverflowException();
 	Operand<int8_t> *ret = new Operand<int8_t>((int8_t)val);
 	return (ret);
 }
@@ -22,7 +22,7 @@ IOperand const * OperandFactory::createInt16( std::string const & value ) const
 {
 	int val = std::stoi(value);
 	if (val < INT16_MIN || val > INT16_MAX)
-		throw Overflow();
+		throw OverflowException();
 	Operand<int16_t> *ret = new Operand<int16_t>((int16_t)val);
 	return (ret);
 }
@@ -31,7 +31,7 @@ IOperand const * OperandFactory::createInt32( std::string const & value ) const
 {
 	float val = std::stof(value);
 	if (val < INT32_MIN || val > INT32_MAX)
-		throw Overflow();
+		throw OverflowException();
 	Operand<int32_t> *ret = new Operand<int32_t>((int32_t)val);
 	return (ret);
 }
@@ -40,7 +40,7 @@ IOperand const * OperandFactory::createFloat( std::string const & value ) const
 {
 	double val = std::stod(value);
 	if (val < FLT_MIN || val > FLT_MAX)
-		throw Overflow();
+		throw OverflowException();
 	Operand<float> *ret = new Operand<float>((float)val);
 	return (ret);
 }
@@ -49,7 +49,7 @@ IOperand const * OperandFactory::createDouble( std::string const & value ) const
 {
 	double val = std::stod(value);
 	if (val < DBL_MIN || val > DBL_MAX)
-		throw Overflow();
+		throw OverflowException();
 	Operand<double> *ret = new Operand<double>(val);
 	return (ret);
 }
