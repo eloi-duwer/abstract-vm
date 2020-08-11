@@ -129,6 +129,18 @@ IOperand const *	Operand<T>::operator%( IOperand const &rhs ) const
 }
 
 template <typename T>
+bool			Operand<T>::operator==( IOperand const &rhs ) const
+{
+	return (rhs.getType() == this->getType() && rhs.toString() == this->toString());
+}
+
+template <typename T>
+bool			Operand<T>::operator!=( IOperand const &rhs ) const
+{
+	return !(*this == rhs);
+}
+
+template <typename T>
 OperandFactory	Operand<T>::factory = OperandFactory();
 
 std::ostream &		operator<<( std::ostream &o, IOperand const &src)

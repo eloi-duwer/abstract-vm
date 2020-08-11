@@ -6,9 +6,6 @@
 # include <fstream>
 # include <cstdint>
 # include <cctype>
-# include <queue>
-
-class IOperand;
 
 std::string trim(std::string const &str);
 

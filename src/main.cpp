@@ -1,6 +1,8 @@
 #include <avm.hpp>
 #include <OperandFactory.hpp>
 #include <Instruction.hpp>
+#include <queue>
+#include <vector>
 
 std::string trim(std::string const &str)
 {
@@ -19,25 +21,45 @@ std::string trim(std::string const &str)
 	return str.substr(deb, end - deb + 1);
 }
 
+void execInstructions(std::queue<Instruction*> &queue)
+{
+	std::vector<const IOperand *>	stack;
+	while(!queue.empty())
+	{
+		if (queue.front()->exec(stack))
+			break;
+		delete queue.front();
+		queue.pop();
+	}
+}
+
 void	readFile(std::istream& file)
 {
-	std::string line;
-	std::queue<Instruction*> queue;
+	std::string					line;
+	std::queue<Instruction*>	queue;
+	bool 						had_parsing_errors = false;
+	int							line_nb = 1;
 
 	while (file.good())
 	{
 		std::getline(file, line);
 		if (line.length() > 0)
 		{
-			queue.push(new Instruction(line));
+			try {
+				queue.push(new Instruction(line));
+			} catch(const std::exception &e) {
+				std::cout << "Parsing error: " << e.what() << std::endl;
+				std::cout << "The above error happened on line " << line_nb << ": \"" << line << "\"" << std::endl;
+				had_parsing_errors = true;
+			}
 		}
+		line_nb++;
 	}
-	while(!queue.empty())
-	{
-		std::cout << *queue.front() << std::endl;
-		delete queue.front();
-		queue.pop();
+	if (had_parsing_errors) {
+		std::cout << "Parsing error detected, aborting" << std::endl;
+		exit(1);
 	}
+	execInstructions(queue);
 }
 
 int		main(int argc, char **argv)

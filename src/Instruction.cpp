@@ -109,6 +109,86 @@ std::string const Instruction::toString( void ) const
 	}
 }
 
+bool	Instruction::exec(std::vector<const IOperand *> &stack)
+{
+	switch(this->instruction)
+	{
+		case push: {
+			const IOperand *copy = this->factory.createOperand(
+				this->op->getType(), this->op->toString()
+			);
+			stack.push_back(copy);
+			break;
+		}
+		case pop:
+			stack.pop_back();
+			break;
+		case dump: {
+			int i = stack.size() - 1;
+			while (i >= 0)
+			{
+				std::cout << *stack[i] << std::endl;
+				--i;
+			}
+			break;
+		}
+		case assert:
+			if (*this->op != *stack.back())
+				std::cout << "assertion failed : expected " << *this->op << ", got " << *stack.back() << std::endl;
+			break;
+		case add: {
+			const IOperand *op = *stack[stack.size() - 2] + *stack.back();
+			stack.pop_back();
+			stack.pop_back();
+			stack.push_back(op);
+			break;
+		}
+		case sub: {
+			const IOperand *op = *stack[stack.size() - 2] - *stack.back();
+			stack.pop_back();
+			stack.pop_back();
+			stack.push_back(op);
+			break;
+		}
+		case mul: {
+			const IOperand *op = *stack[stack.size() - 2] * *stack.back();
+			stack.pop_back();
+			stack.pop_back();
+			stack.push_back(op);
+			break;
+		}
+		case div: {
+			const IOperand *op = *stack[stack.size() - 2] / *stack.back();
+			stack.pop_back();
+			stack.pop_back();
+			stack.push_back(op);
+			break;
+		}
+		case mod: {
+			const IOperand *op = *stack[stack.size() - 2] % *stack.back();
+			stack.pop_back();
+			stack.pop_back();
+			stack.push_back(op);
+			break;
+		}
+		case print:
+			if (stack.back()->getType() != IOperand::Int8)
+				std::cout << "Expected an Int8 Operand for Instruction print" << std::endl;
+			else {
+				char val = std::stoi(stack.back()->toString());
+				std::cout << val;
+			}
+			break;
+		case exit:
+			std::cout << "Exit" << std::endl;
+			return (true);
+			break;
+		default:
+			break;
+	}
+	return (false);
+}
+
 OperandParser Instruction::parser = OperandParser();
 
 OperandFactory Instruction::factory = OperandFactory();

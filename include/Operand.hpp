@@ -16,12 +16,14 @@ class Operand : public IOperand {
 		Operand( const Operand &op );
 		virtual ~Operand();
 
-		Operand &		 operator=( Operand const &rhs );
-		IOperand const * operator+( IOperand const &rhs ) const;
-		IOperand const * operator-( IOperand const &rhs ) const;
-		IOperand const * operator*( IOperand const &rhs ) const;
-		IOperand const * operator/( IOperand const &rhs ) const;
-		IOperand const * operator%( IOperand const &rhs ) const;
+		Operand &			operator=( Operand const &rhs );
+		bool				operator==(IOperand const &rhs) const;
+		bool				operator!=(IOperand const &rhs) const;
+		IOperand const *	operator+( IOperand const &rhs ) const;
+		IOperand const *	operator-( IOperand const &rhs ) const;
+		IOperand const *	operator*( IOperand const &rhs ) const;
+		IOperand const *	operator/( IOperand const &rhs ) const;
+		IOperand const *	operator%( IOperand const &rhs ) const;
 
 		std::string const & toString( void ) const;
 

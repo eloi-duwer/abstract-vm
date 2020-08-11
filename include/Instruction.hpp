@@ -2,6 +2,7 @@
 # define __INSTRUCTION_HPP__
 # include <IOperand.hpp>
 # include <OperandParser.hpp>
+# include <vector>
 
 class Instruction
 {
@@ -14,10 +15,11 @@ class Instruction
 		Instruction( const Instruction &inst );
 		~Instruction( void );
 
-		Instruction & operator=( Instruction const &rhs );
-		eInstruction getInstruction( void ) const;
-		IOperand const *getOperand( void ) const;
-		std::string const toString( void ) const;
+		Instruction &		operator=( Instruction const &rhs );
+		eInstruction		getInstruction( void ) const;
+		IOperand const		*getOperand( void ) const;
+		std::string const	toString( void ) const;
+		bool				exec(std::vector<const IOperand *> &stack);
 
 	private:
 

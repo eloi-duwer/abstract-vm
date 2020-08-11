@@ -3,10 +3,7 @@
 #include <Operand.hpp>
 #include <avm.hpp>
 
-OperandFactory::OperandFactory( void )
-{
-	std::cout << "new operandFactory" << std::endl;
-}
+OperandFactory::OperandFactory( void ) {}
 
 IOperand const * OperandFactory::createOperand( IOperand::eOperandType type, std::string const & value ) const {
 	return ((this->*operandArray[type])(value));
@@ -14,31 +11,46 @@ IOperand const * OperandFactory::createOperand( IOperand::eOperandType type, std
 	
 IOperand const * OperandFactory::createInt8( std::string const & value ) const
 {
-	Operand<int8_t> *ret = new Operand<int8_t>((int8_t)std::stoi(value));
+	int val = std::stoi(value);
+	if (val < INT8_MIN || val > INT8_MAX)
+		throw Overflow();
+	Operand<int8_t> *ret = new Operand<int8_t>((int8_t)val);
 	return (ret);
 }
 
 IOperand const * OperandFactory::createInt16( std::string const & value ) const
 {
-	Operand<int16_t> *ret = new Operand<int16_t>((int16_t)std::stoi(value));
+	int val = std::stoi(value);
+	if (val < INT16_MIN || val > INT16_MAX)
+		throw Overflow();
+	Operand<int16_t> *ret = new Operand<int16_t>((int16_t)val);
 	return (ret);
 }
 
 IOperand const * OperandFactory::createInt32( std::string const & value ) const
 {
-	Operand<int32_t> *ret = new Operand<int32_t>((int32_t)std::stoi(value));
+	float val = std::stof(value);
+	if (val < INT32_MIN || val > INT32_MAX)
+		throw Overflow();
+	Operand<int32_t> *ret = new Operand<int32_t>((int32_t)val);
 	return (ret);
 }
 
 IOperand const * OperandFactory::createFloat( std::string const & value ) const
 {
-	Operand<float> *ret = new Operand<float>(std::stof(value));
+	double val = std::stod(value);
+	if (val < FLT_MIN || val > FLT_MAX)
+		throw Overflow();
+	Operand<float> *ret = new Operand<float>((float)val);
 	return (ret);
 }
 
 IOperand const * OperandFactory::createDouble( std::string const & value ) const
 {
-	Operand<double> *ret = new Operand<double>(std::stod(value));
+	double val = std::stod(value);
+	if (val < DBL_MIN || val > DBL_MAX)
+		throw Overflow();
+	Operand<double> *ret = new Operand<double>(val);
 	return (ret);
 }
 
