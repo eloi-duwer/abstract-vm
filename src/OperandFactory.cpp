@@ -39,7 +39,7 @@ IOperand const * OperandFactory::createInt32( std::string const & value ) const
 IOperand const * OperandFactory::createFloat( std::string const & value ) const
 {
 	double val = std::stod(value);
-	if (val < FLT_MIN || val > FLT_MAX)
+	if (val < -FLT_MAX || val > FLT_MAX)
 		throw OverflowException();
 	Operand<float> *ret = new Operand<float>((float)val);
 	return (ret);
@@ -48,7 +48,7 @@ IOperand const * OperandFactory::createFloat( std::string const & value ) const
 IOperand const * OperandFactory::createDouble( std::string const & value ) const
 {
 	double val = std::stod(value);
-	if (val < DBL_MIN || val > DBL_MAX)
+	if (val < -DBL_MAX || val > DBL_MAX)
 		throw OverflowException();
 	Operand<double> *ret = new Operand<double>(val);
 	return (ret);

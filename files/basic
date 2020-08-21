@@ -1,6 +1,17 @@
 push int8(2)
 push int16(3)
 add
-assert int16(6)
+assert int16(5)
 dump
+push float(15.5)
+mult
+dump
+; 105 = i and 72 = H
+push int8(105)
+push int8(72)
+print
+pop
+print
+; comment
 exit
+; comment after exit

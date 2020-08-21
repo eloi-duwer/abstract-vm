@@ -33,6 +33,12 @@ class Instruction
 			}
 		};
 
+		struct DivModtByZeroException : public std::exception {
+			virtual const char *what() const throw() {
+				return ("Division or Modulo by zero is not permitted");
+			}
+		};
+
 		class AssertionException : public std::exception {
 
 			public:
@@ -40,7 +46,9 @@ class Instruction
 				AssertionException(const std::string &expected, const std::string &got);
 				virtual const char *what() const throw();
 
-			const std::string str;
+			private:
+
+				const std::string str;
 
 		};
 

@@ -1,0 +1,10 @@
+push int8(5)
+push double(10)
+sub
+dump
+pop
+push double(-50)
+push float(-20)
+add
+dump
+exit

@@ -6,43 +6,30 @@ IOperand const * OperandParser::parseOperand ( std::string const & line )
 {
 	int index = line.find(" ", 0);
 	if (index <= 0)
-		return (NULL);
+		throw ExpectedOperand();
 	if (line.compare(index + 1, 4, "int8") == 0)
-	{
-		return this->factory.createOperand(
-			IOperand::Int8,
-			line.substr(index + 6, line.length() - (index + 6) - 1)
-		);
-	}
+		return this->doParseOperand(IOperand::Int8, line);
 	else if (line.compare(index + 1, 5, "int16") == 0)
-	{
-		return this->factory.createOperand(
-			IOperand::Int16,
-			line.substr(index + 7, line.length() - (index + 7) - 1)
-		);
-	}
+		return this->doParseOperand(IOperand::Int16, line);
 	else if (line.compare(index + 1, 5, "int32") == 0)
-	{
-		return this->factory.createOperand(
-			IOperand::Int32,
-			line.substr(index + 7, line.length() - (index + 7) - 1)
-		);
-	}
+		return this->doParseOperand(IOperand::Int32, line);
 	else if (line.compare(index + 1, 5, "float") == 0)
-	{
-		return this->factory.createOperand(
-			IOperand::Float,
-			line.substr(index + 7, line.length() - (index + 7) - 1));
-	}
+		return this->doParseOperand(IOperand::Float, line);
 	else if (line.compare(index + 1, 6, "double") == 0)
-	{
-		return this->factory.createOperand(
-			IOperand::Double,
-			line.substr(index + 8, line.length() - (index + 8) - 1)
-		);
-	}
+		return this->doParseOperand(IOperand::Double, line);
 	else
-		return (NULL);
+		throw UnknownOperandException();
+}
+
+IOperand const * OperandParser::doParseOperand( IOperand::eOperandType type, std::string const & line )
+{
+	size_t begin = line.find("(");
+	size_t end = line.rfind(")");
+
+	return this->factory.createOperand(
+		type,
+		line.substr(begin + 1, end - begin - 1)
+	);
 }
 
 OperandFactory OperandParser::factory = OperandFactory();

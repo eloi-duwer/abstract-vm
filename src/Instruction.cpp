@@ -142,6 +142,8 @@ bool	Instruction::exec(std::vector<const IOperand *> &stack)
 				throw AssertionException(this->op->toString(), stack.back()->toString());
 			break;
 		case add: {
+			if (stack.size() < 2)
+				throw NotEnoughOperandsOnStackException();
 			const IOperand *op = *stack[stack.size() - 2] + *stack.back();
 			delete stack.back();
 			stack.pop_back();
@@ -151,6 +153,8 @@ bool	Instruction::exec(std::vector<const IOperand *> &stack)
 			break;
 		}
 		case sub: {
+			if (stack.size() < 2)
+				throw NotEnoughOperandsOnStackException();
 			const IOperand *op = *stack[stack.size() - 2] - *stack.back();
 			delete stack.back();
 			stack.pop_back();
@@ -160,6 +164,8 @@ bool	Instruction::exec(std::vector<const IOperand *> &stack)
 			break;
 		}
 		case mul: {
+			if (stack.size() < 2)
+				throw NotEnoughOperandsOnStackException();
 			const IOperand *op = *stack[stack.size() - 2] * *stack.back();
 			delete stack.back();
 			stack.pop_back();
@@ -169,6 +175,10 @@ bool	Instruction::exec(std::vector<const IOperand *> &stack)
 			break;
 		}
 		case div: {
+			if (stack.size() < 2)
+				throw NotEnoughOperandsOnStackException();
+			if (std::stoi(stack.back()->toString()) == 0)
+				throw DivModtByZeroException();
 			const IOperand *op = *stack[stack.size() - 2] / *stack.back();
 			delete stack.back();
 			stack.pop_back();
@@ -178,6 +188,10 @@ bool	Instruction::exec(std::vector<const IOperand *> &stack)
 			break;
 		}
 		case mod: {
+			if (stack.size() < 2)
+				throw NotEnoughOperandsOnStackException();
+			if (std::stoi(stack.back()->toString()) == 0)
+				throw DivModtByZeroException();
 			const IOperand *op = *stack[stack.size() - 2] % *stack.back();
 			delete stack.back();
 			stack.pop_back();

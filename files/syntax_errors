@@ -1,3 +1,28 @@
+; overflows and underflows
 push int8(666)
 push int16(9999999)
+push int8(-666)
+push float(Inf)
+
+; invalid instruction
 this_is_not_a_valid_operation
+
+; invalid operand
+push int75(lets break everything)
+
+; invalid numbers
+push int8(lets try again)
+push int32(i keep hoping)
+push float(what about that??)
+push double(not even double?)
+
+; expecting an operand
+push
+assert
+
+; other stuff
+push double(-)
+push int8
+push int8)(
+pushint8(42)
+push      int8(42)
